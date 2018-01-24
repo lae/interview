@@ -1,0 +1,77 @@
+---
+# tasks file for interview
+- include: install_packages.yml
+- include: update_host.yml
+
+- name: Create user for interviewee
+  user:
+    name: "{{ interview_user }}"
+    shell: /bin/bash
+    password: "{{ interview_pass }}"
+
+- include: configure_vim.yml tags=vim,dev
+
+- name: Add user to sudoers
+  copy:
+    content: "{{ interview_user }} ALL=(ALL:ALL) ALL"
+    dest: "/etc/sudoers.d/{{ interview_user }}"
+    validate: "visudo -cf %s"
+
+- name: Copy MOTD
+  template:
+    src: motd
+    dest: /etc/motd
+
+- name: Ensure profile.d exists
+  file: path=/etc/profile.d state=directory
+
+- name: Add bash history settings
+  copy: src=history.sh dest=/etc/profile.d/history.sh mode=0755
+
+- name: Add bash aliases
+  copy: src=aliases.sh dest=/etc/profile.d/aliases.sh mode=0755
+
+- name: Ensure interview user gets them too
+  lineinfile:
+    line: "{{ item }}"
+    dest: "{{ interview_home }}/.bashrc"
+  with_items:
+    - ". /etc/profile.d/aliases.sh"
+    - ". /etc/profile.d/history.sh"
+
+- name: Add screenrc
+  copy: src=screenrc dest={{ interview_home }}/.screenrc
+
+- name: Create questions directory
+  file:
+    path: "{{ interview_questions_path }}"
+    state: directory
+  tags: questions
+
+- name: Copy quiz script
+  template:
+    src: quiz.j2
+    dest: /usr/bin/quiz
+    mode: 0755
+  tags: questions
+
+- name: Create (or reset) question marker
+  copy:
+    content: "1"
+    dest: "{{ interview_questions_marker }}"
+    mode: 0666
+  tags: questions
+
+- include: problem_sets.yml
+  tags: questions
+
+- debug: msg="{{ questions }}"
+  tags: questions
+
+- name: Create all of the questions
+  copy:
+    content: "{{ item.1 }}\n"
+    dest: "{{ interview_questions_path }}/q{{ item.0 + 1 }}"
+    mode: 0644
+  with_indexed_items: "{{ questions }}"
+  tags: questions

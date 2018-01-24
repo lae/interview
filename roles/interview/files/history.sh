@@ -1,0 +1,4 @@
+HISTCONTROL=ignoreboth
+HISTSIZE=131072
+HISTFILESIZE=33554432
+shopt -s histappend

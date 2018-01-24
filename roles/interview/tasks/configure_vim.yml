@@ -1,0 +1,10 @@
+---
+# vim74 is probably subject to change on upgrades
+- name: Copy jellybeans vim colour scheme
+  copy: src=jellybeans.vim dest=/usr/share/vim/vim74/colors/jellybeans.vim
+
+- name: Copy vim configuration
+  template: src=vimrc.j2 dest=/etc/vimrc
+
+- name: Copy vim configuration
+  template: src=vimrc.j2 dest={{ interview_home }}/.vimrc

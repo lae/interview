@@ -1,0 +1,5 @@
+---
+# defaults file for interview
+interview_home: "/home/{{ interview_user }}"
+interview_questions_path: "{{ interview_home }}/.questions"
+interview_questions_marker: "{{ interview_questions_path }}/current"

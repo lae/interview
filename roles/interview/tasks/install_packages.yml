@@ -1,0 +1,36 @@
+---
+- name: Install packages via apt
+  apt: name={{ item }} state=latest update_cache=yes
+  with_items:
+    - sudo
+    - screen
+    - vim
+    - emacs-nox
+    - python-pip
+    - python-dev
+    - iptables-persistent
+    - build-essential
+    - libyaml-dev
+    - libffi-dev
+    - libssl-dev
+    - virtualenv
+
+- name: Create virtualenv with ansible
+  pip:
+    name: "{{ item }}"
+    state: latest
+    virtualenv: /opt/venv
+  with_items:
+    - ansible
+
+- name: Make ansible readable
+  file:
+    dest: /opt/venv
+    state: directory
+    mode: 0777
+
+- name: Symlink ansible
+  file:
+    dest: /usr/bin/ansible
+    src: /opt/venv/bin/ansible
+    state: link

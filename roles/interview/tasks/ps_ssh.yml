@@ -1,0 +1,14 @@
+---
+- set_fact:
+    append_questions:
+      - "Create a new user named charliebrown, with /bin/bash as his shell. Password does not matter. Then type 'q charliebrown' (short for sudo su - charliebrown) to login to that user."
+      - "Generate an SSH key for charliebrown, and allow charliebrown to SSH into your user's account using this key."
+
+- name: Ensure charliebrown doesn't exist
+  user: name=charliebrown state=absent
+
+- name: Ensure charliebrown's home directory doesn't exist
+  shell: "rm -rf /home/charliebrown"
+
+- set_fact:
+    questions: "{{ questions }}+{{ append_questions }}"

@@ -1,0 +1,21 @@
+---
+- name: Include supersecretfiles problem set
+  include: ps_supersecretfiles.yml
+  become_user: "{{ interview_user }}"
+
+- name: Include system lifecycle problem set
+  include: ps_systemlifecycle.yml
+
+- name: Include networking problem set
+  include: ps_networking.yml
+
+- name: Include SSH problem set
+  include: ps_ssh.yml
+
+- name: Include Ansible problem set
+  include: ps_ansible.yml
+  become_user: "{{ interview_user }}"
+
+- name: Include programming problem set
+  include: ps_programming.yml
+  become_user: "{{ interview_user }}"

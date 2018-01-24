@@ -1,0 +1,29 @@
+---
+- set_fact:
+    append_questions:
+      - "There are a few playbooks in {{ interview_home }}/ansible. Take a look at some of the playbooks in there. You can refer to the documentation at http://docs.ansible.com/ for this section. Type next to proceed."
+      - "Explain (or, if you are not familiar with Ansible, attempt to) what {{ interview_home }}/ansible/sysstat.yml does."
+      - "Explain what {{ interview_home }}/ansible/charliebrown.yml does."
+      - "{{ interview_home }}/ansible/interview.yml was actually used for this interview. It\'s missing a lot of context, but explain as much as you can gather from this."
+
+- name: Create ansible directory
+  file:
+    path: "{{ interview_home }}/ansible"
+    state: directory
+    mode: 0755
+
+- name: Copy playbooks over to ansible directory
+  copy:
+    src: "ansible/{{ item }}"
+    dest: "{{ interview_home }}/ansible"
+    mode: 0644
+    follow: yes
+  #with_fileglob:
+  #  - ansible/*
+  with_items:
+    - sysstat.yml
+    - charliebrown.yml
+    - interview.yml
+
+- set_fact:
+    questions: "{{ questions }}+{{ append_questions }}"

@@ -1,0 +1,15 @@
+# term
+term "screen-256color"
+
+# encoding
+encoding UTF-8
+
+# fix residual editor text
+altscreen on
+
+# main options
+# attrcolor b ".I"
+defbce "on"
+vbell off
+startup_message off
+defscrollback 16384

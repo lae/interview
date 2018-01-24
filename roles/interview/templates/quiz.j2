@@ -1,0 +1,67 @@
+#!/bin/bash
+# {{ ansible_managed }}
+
+QUESTIONS_DIR="{{ interview_questions_path }}"
+QUESTION_MARKER="{{ interview_questions_marker }}"
+CURRENT=$(cat "${QUESTION_MARKER}")
+
+method="$1"
+shift
+
+function update_marker() {
+    if [[ "x$1" =~ ^x[0-9]+$ ]]; then
+        printf $1 > "${QUESTION_MARKER}"
+    else
+        echo "Tried to update marker with non-integer, but that's not allowed."
+        exit 1
+    fi
+}
+
+function next_question() {
+    let CURRENT++
+    question="${QUESTIONS_DIR}/q${CURRENT}"
+    if [ -f "$question" ]; then
+        update_marker $CURRENT
+        print_question
+    else
+        echo "Looks like there aren't any more questions to see!"
+    fi
+}
+
+function previous_question() {
+    if [[ $CURRENT -eq 1 ]]; then
+        echo "Non non, that's the wrong way."
+    else
+        let CURRENT--
+        update_marker $CURRENT
+        print_question
+    fi
+}
+
+function print_question {
+    question="${QUESTIONS_DIR}/q${CURRENT}"
+    if [ -f "$question" ]; then
+        colorize=$(tput setaf 153)
+        normalize=$(tput sgr0)
+        echo $colorize
+        cat "$question"
+        echo $normalize
+    else
+        echo "Question at '$question' doesn't exist. Oops?"
+    fi
+}
+
+case $method in
+next)
+    next_question
+    ;;
+previous)
+    previous_question
+    ;;
+show|"")
+    print_question
+    ;;
+*)
+    echo "Method '$method' is unsupported."
+    ;;
+esac

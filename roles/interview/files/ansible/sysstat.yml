@@ -1,0 +1,43 @@
+---
+- apt: name=sysstat state=installed update_cache=yes
+  when: ansible_pkg_mgr == 'apt'
+
+- yum: name=sysstat state=installed update_cache=yes
+  when: ansible_pkg_mgr == 'yum'
+
+- file:
+    path: /var/log/sysstat
+    state: directory
+    mode: 0755
+
+- lineinfile:
+    dest: /etc/default/sysstat
+    state: present
+    line: "ENABLED='true'"
+    regexp: "^ENABLED="
+
+- copy:
+    src: sysstat
+    dest: /etc/sysstat/sysstat
+    mode: 0644
+  when: ansible_os_family == 'Debian'
+
+- lineinfile:
+    dest: /etc/default/sysstat
+    state: present
+    line: "ENABLED='true'"
+    regexp: "^ENABLED="
+  when: ansible_os_family == 'Debian'
+
+- copy:
+    src: sysstat
+    dest: /etc/sysconfig/sysstat
+    mode: 0644
+  when: ansible_os_family == 'RedHat'
+
+- service:
+    name: sysstat
+    state: started
+    enabled: yes
+
+# vim:ft=ansible:

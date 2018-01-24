@@ -1,0 +1,23 @@
+---
+- set_fact:
+    append_questions:
+      - "Open up {{ interview_home }}/code/up-restrict.sh"
+      - "Clone https://github.com/lae/sift.git"
+
+- name: Create code directory
+  file:
+    path: "{{ interview_home }}/code"
+    state: directory
+    mode: 0755
+
+- name: Copy scripts over to code directory
+  copy:
+    src: "{{ item }}"
+    dest: "{{ interview_home }}/code"
+    mode: 0644
+    follow: yes
+  with_items:
+    - up-restrict.sh
+
+- set_fact:
+    questions: "{{ questions }}+{{ append_questions }}"

@@ -1,0 +1,5 @@
+ansible_ssh_user: root
+
+interview_user: john
+interview_pass: "$6$83AqWWwnz3Rk5GQl$B/3dlw7AEBB4pgsQEnCpaxpC70w9RvhsmzOGqvesoQ98jO/uCO20.DdtykbY5t6eoKI3bO/jYRnFBR8f9hj62/"
+interview_realname: John Doe

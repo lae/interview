@@ -1,0 +1,6 @@
+---
+# handlers file for interview
+- name: restart netfilter
+  service:
+    name: netfilter-persistent
+    state: restarted

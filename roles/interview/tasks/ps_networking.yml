@@ -1,0 +1,15 @@
+---
+- set_fact:
+    append_questions:
+      - "There is a second interface on this VM. The interface has been assigned an IP of {{ private_ip }} and netmask of 255.255.0.0. Configure it so that you can ping 10.99.0.1."
+      - "You want to run an HTTP and HTTPS service. However, the firewall is strictly locked down. Configure the server to allow incoming connections to both services, and ensure this configuration will be restored on boot."
+
+- name: Copy iptables rules
+  copy:
+    src: iptables.rules
+    dest: /etc/iptables/rules.v4
+  notify:
+    - restart netfilter
+
+- set_fact:
+    questions: "{{ questions }}+{{ append_questions }}"

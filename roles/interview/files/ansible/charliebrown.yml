@@ -1,0 +1,24 @@
+---
+- user:
+    name: charliebrown
+    group: charliebrown
+    password: "$6$9Qysfx3jGl65YkzU$HCur2tb032ekVws1h6CLj9dgoueM7e.NT...as9ULiNhk9vtJMAjvwjX24IrXd8xw/Jlvro36UPHNeli6xgNi1"
+    home: "{{ charlies_home }}"
+    state: present
+
+- file:
+    path: "{{ charlies_home }}/.ssh/"
+    mode: 0700
+    owner: charliebrown
+    group: charliebrown
+
+- copy:
+    src: charliebrown.privkey
+    dest: /home/charliebrown/.ssh/id_rsa
+    mode: 0600
+
+- authorized_key:
+    user: snoopy
+    key: "{{ lookup('file', 'charliebrown.pubkey') }}"
+
+# vim:ft=ansible:

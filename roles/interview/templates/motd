@@ -1,0 +1,16 @@
+
+Hi {{ interview_realname }}! Welcome to the FireEye Labs Technical Interview!
+
+You'll be doing some relatively trivial problem solving in this session, as
+well as answering a couple of questions pertaining to systems administration 
+and automation (feel free to use this box to assist you).
+
+You can navigate through the problem sets using "next" to move to the next
+question, "previous" to move to the previous question, and "show" to show the
+current question. Shortcuts are n, p, and s respectively.
+
+You may also use sudo as necessary. Shortcut to login to a root shell is 'q'.
+
+Please run "screen" and give me a moment to attach to your screen session as
+well. You should be doing your work in that screen session.
+
